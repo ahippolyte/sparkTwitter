@@ -31,6 +31,7 @@ def toCounter(x):
 	del count_dict[x[0]]
 	return count_dict
 
+# transform a list of n hastags to n associations between 1 hashtag and n-1 hashtags
 def SplitHashtags(x):
 	combination = []
 	for hashtag in x:
@@ -46,7 +47,7 @@ hashtagFriends = filtered.map(lambda x: get_hashtags(x))	\
 
 num = hashtagFriends.count()
 
-print(hashtagFriends.top(num))
+# print(hashtagFriends.top(num))
 
 # associatedHashtags.coalesce(1).saveAsTextFile("output_directory")
 
