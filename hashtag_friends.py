@@ -12,7 +12,7 @@ spark = SparkSession(sc)
 print("_______________________________________")
 # ----------------------------------------------
 
-df = sc.textFile("../data/tiny_twitter.json")
+df = sc.textFile("/user/fzanonboito/CISD/tiny_twitter.json")
 
 # my_line is a string in jsonnl format, my_dict will be a dictionary
 filtered = df.map(lambda x: json.loads(x)) \
@@ -31,7 +31,7 @@ def toCounter(x):
 	del count_dict[x[0]]
 	return count_dict
 
-# transform a list of n hastags to n associations between 1 hashtag and n-1 hashtags
+# Transform a list of n hastags to n associations between 1 hashtag and n-1 hashtags
 def SplitHashtags(x):
 	combination = []
 	for hashtag in x:
@@ -45,11 +45,5 @@ hashtagFriends = filtered.map(lambda x: get_hashtags(x))	\
 						 .flatMap(lambda x: x)				\
 						 .reduceByKey(lambda a, b: a + b)	\
 
-num = hashtagFriends.count()
-
-# print(hashtagFriends.top(num))
-
-# associatedHashtags.coalesce(1).saveAsTextFile("output_directory")
-
-# x = ["One", "Two", "Three", "Four"]
-# print(SplitHashtags(x))
+# One action to apply each previous transformation
+num = hashtagFriends.take(1)
