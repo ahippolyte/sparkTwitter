@@ -12,7 +12,7 @@ spark = SparkSession(sc)
 print("_______________________________________")
 # ----------------------------------------------
 
-df = sc.textFile("../data/tiny_twitter.json")
+df = sc.textFile("../TP_4/smaller_twitter.json")
 
 # my_line is a string in jsonnl format, my_dict will be a dictionary
 filtered = df.map(lambda x: json.loads(x)) \
@@ -46,7 +46,7 @@ hashtagFriends = filtered.map(lambda x: get_hashtags(x))	\
 
 num = hashtagFriends.count()
 
-print(hashtagFriends.top(num))
+print(hashtagFriends.top(1))
 
 # associatedHashtags.coalesce(1).saveAsTextFile("output_directory")
 
