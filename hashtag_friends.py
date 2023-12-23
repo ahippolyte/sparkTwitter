@@ -2,6 +2,7 @@ from pyspark import SparkContext, SparkConf
 from pyspark.sql import SparkSession
 import json
 from collections import Counter
+import time as tm
 
 #-------------- Initialize Spark ---------------
 conf = SparkConf().setAppName("Twitter-HastagFriends")
@@ -12,7 +13,9 @@ spark = SparkSession(sc)
 print("_______________________________________")
 # ----------------------------------------------
 
-df = sc.textFile("/user/fzanonboito/CISD/tiny_twitter.json")
+# df = sc.textFile("/user/fzanonboito/CISD/tiny_twitter.json")
+df = sc.textFile("/user/fzanonboito/CISD/smaller_twitter.json")
+# df = sc.textFile("/user/auber/data_ple/tweets/")
 
 # my_line is a string in jsonnl format, my_dict will be a dictionary
 filtered = df.map(lambda x: json.loads(x)) \
@@ -45,5 +48,9 @@ hashtagFriends = filtered.map(lambda x: get_hashtags(x))	\
 						 .flatMap(lambda x: x)				\
 						 .reduceByKey(lambda a, b: a + b)	\
 
+start = tm.perf_counter()
 # One action to apply each previous transformation
-num = hashtagFriends.take(1)
+take = hashtagFriends.take(1)
+end = tm.perf_counter()
+
+print(end-start)
